@@ -1,0 +1,13 @@
+#freq {
+   color: rgb(153, 0, 82);
+   font-size: 60px;
+   padding: 50px;
+   letter-spacing: 2px;
+   line-height: 1;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
