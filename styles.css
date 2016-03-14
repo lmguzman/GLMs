@@ -12,8 +12,9 @@
     padding: 10px;
 }
 table, th, td {
-    width: 60px;
-    padding: 15px;
+    table-layout: fixed;
+    width: 400px;
+    padding: 3px;
     text-align: left;
 }
 .smaller{

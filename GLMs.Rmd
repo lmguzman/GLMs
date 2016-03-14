@@ -130,17 +130,17 @@ Using a link function is often better than simply transforming the dependent var
 
 # What links should I use? 
 
-|Families                   |Links
-|---------------------------|---------------------------------------------------
-|gaussian (c)               |identity, log, inverse                                             
-|inverse.gaussian (c)       |$1/\mu^2$, inverse, identity, log                                  
-|gamma (c)            |inverse, identity, log                                             
-|quasi (c)            |logit, probit, cloglog, identity, inverse, $1/\mu^2$, sqrt, power  
-|poisson (d)          |log, identity, sqrt                                                
-|quasipoisson (d)     |identity, logit, probit cloglog                                    
-|negative binomial (d)|log, sqrt, identity    *use glm.nb function from MASS library*    
-|binomial (d)         |logit, probit, cauchit, log, cloglog                               
-|quasibinomial (d)    |identity, logit, probit, cloglog                                   
+Families                   |Links
+---------|----------------
+gaussian (c)               |identity, log, inverse             
+inverse.gaussian (c)       |$1/\mu^2$, inverse, identity, log
+gamma (c)            |inverse, identity, log
+quasi (c)            |logit, probit, cloglog, identity, inverse, $1/\mu^2$, sqrt, power
+poisson (d)          |log, identity, sqrt
+quasipoisson (d)     |identity, logit, probit cloglog                                    
+negative binomial (d)|log, sqrt, identity    *use glm.nb function from MASS library*    
+binomial (d)         |logit, probit, cauchit, log, cloglog                               
+quasibinomial (d)    |identity, logit, probit, cloglog                                   
 
  d = discrete, c = continous
  
@@ -160,9 +160,6 @@ The “correct” combination of family and link function is arrived at by trial
 
 
 LO: Select the most appropriate GLM {.smaller}
-
-
-
 ---
 
 # Challenge 
@@ -180,9 +177,9 @@ head(Owl)
 ```
 
 LO: Carry out a GLM {.smaller}
-
 ---
 
+---
 ```{r}
 hist(Owl$count)
 ```
@@ -303,6 +300,21 @@ par(mfrow = c(2,2))
 plot(LogitBoarModel)
 ```
 
+Look at all the other link functions and choose the one with the lowest AIC
+
+```{r}
+probitBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = probit), data = Boar)
+
+cauchitBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = cauchit), data = Boar)
+
+logBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = log), data = Boar)
+
+cloglogBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = cloglog), data = Boar)
+
+AIC(LogitBoarModel, probitBoarModel, cauchitBoarModel, logBoarModel, cloglogBoarModel)
+```
+
+Logit has the lowest AIC, so let's keep working with that
 
 
 ---
