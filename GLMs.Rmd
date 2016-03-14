@@ -11,7 +11,8 @@ Etherpad:
 
 https://public.etherpad-mozilla.org/p/404GLMs
 
-Online Material:
+
+Link to all material:
 
 https://github.com/lmguzman/GLMs
 
