@@ -156,7 +156,12 @@ The “correct” combination of family and link function is arrived at by trial
 - adjusted R2 values (where relevant, higher is better)
 - AIC values (lower is better) of different nested models
 
+
+
+
 LO: Select the most appropriate GLM {.smaller}
+
+
 
 ---
 
@@ -175,6 +180,7 @@ head(Owl)
 ```
 
 LO: Carry out a GLM {.smaller}
+
 ---
 
 ```{r}
@@ -257,5 +263,46 @@ By the end of this lesson the students will:
 ---
 
 #Challenge 2 Solution
+
+Look at the data first
+
+```{r}
+
+Boar <- read.csv('Boar.csv')
+
+head(Boar)
+```
+
+Tb is the response variable. Sex, age and length are explanatory variables.
+
+```{r}
+summary(Boar)
+```
+
+Looking at the summary, Tb is a categorical variables with two categories. Therefore we need to use the binomial distribution. 
+
+The default link functions for the binomial distribution are: logit, probit, cauchit, log, cloglog
+Let's start with the logit function
+
+```{r}
+LogitBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = logit), data = Boar)
+```
+
+Let's look at the AIC and pseudo $R^2$
+
+```{r}
+AIC(LogitBoarModel)
+(LogitBoarModel$null.deviance - LogitBoarModel$deviance) / LogitBoarModel$null.deviance
+```
+
+And the distribution of the residuals
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(LogitBoarModel)
+```
+
+
 
 ---
