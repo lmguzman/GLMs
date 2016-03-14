@@ -11,6 +11,10 @@ Etherpad:
 
 https://public.etherpad-mozilla.org/p/404GLMs
 
+Online Material:
+
+https://github.com/lmguzman/GLMs
+
 ---
 
 ## What is a frequency distribution? {#freq .center}
@@ -50,15 +54,18 @@ Relative species abundance of beetles sampled from the river Thames collected by
 
 # Learning Objectives
 
-- compare and categorize GLMs vs ANOVAS and regressions
-- Run a model using GLMs
-- Identify and know how to use the different components of GLMs
-- How to choose a good model
+By the end of this lesson the students will:
+
+- Differentiate and categorize GLMs vs ANOVAS and regressions
+- Identify the different components of GLMs
+- Select the most appropriate GLM
+- Carry out a GLM
 
 ---
 
 <img src="frameework.png" width="800">
 
+LO: Differentiate and categorize GLMs vs ANOVAS and regressions {.smaller}
 ---
 
 # When do we use them?
@@ -85,6 +92,7 @@ $\varepsilon$ is the error term
 Where $g$ is a function (called the link function) which transforms each value of y in relation to the linear predictors (the variables and their coefficients)
 i.e. the link function transforms the dependent variable within the model.
 
+LO: Identify the different components of GLMs {.smaller}
 ---
 
 # What is the link function?
@@ -116,20 +124,22 @@ legend(x = 'topright', inset=c(-0.53,0), legend = c('Identity', 'Negative Binomi
 
 
 Using a link function is often better than simply transforming the dependent variable, because it doesn’t simply attempt to make the variance constant. Instead, it fits a function that “adjusts” the variance as the data is being fitted.
----
-# What links should I use?
 
-Families             | Links 
----------            |--------
-gaussian (c)         | identity, log, inverse
-inverse.gaussian (c) |$1/\mu^2$, inverse, identity, log
-gamma (c)            |inverse, identity, log
-quasi (c)            |logit, probit, cloglog, identity, inverse, $1/\mu^2$, sqrt, power
-poisson (d)          |log, identity, sqrt
-quasipoisson (d)     |identity, logit, probit cloglog
-negative binomial (d)|log, sqrt, identity    *use glm.nb function from MASS library*
-binomial (d)         |logit, probit, cauchit, log, cloglog
-quasibinomial (d)    |identity, logit, probit, cloglog
+---
+
+# What links should I use? 
+
+|Families                   |Links
+|---------------------------|---------------------------------------------------
+|gaussian (c)               |identity, log, inverse                                             
+|inverse.gaussian (c)       |$1/\mu^2$, inverse, identity, log                                  
+|gamma (c)            |inverse, identity, log                                             
+|quasi (c)            |logit, probit, cloglog, identity, inverse, $1/\mu^2$, sqrt, power  
+|poisson (d)          |log, identity, sqrt                                                
+|quasipoisson (d)     |identity, logit, probit cloglog                                    
+|negative binomial (d)|log, sqrt, identity    *use glm.nb function from MASS library*    
+|binomial (d)         |logit, probit, cauchit, log, cloglog                               
+|quasibinomial (d)    |identity, logit, probit, cloglog                                   
 
  d = discrete, c = continous
  
@@ -145,6 +155,8 @@ The “correct” combination of family and link function is arrived at by trial
 - adjusted R2 values (where relevant, higher is better)
 - AIC values (lower is better) of different nested models
 
+LO: Select the most appropriate GLM {.smaller}
+
 ---
 
 # Challenge 
@@ -154,9 +166,95 @@ The “correct” combination of family and link function is arrived at by trial
 
 # How do I do it in R?
 
+Let's look at some data first. 
+
 ```{r}
 Owl <- read.csv('Owl.csv')
 head(Owl)
+```
+
+LO: Carry out a GLM {.smaller}
+---
+
+```{r}
 hist(Owl$count)
 ```
 
+---
+
+```{r}
+OwlModel <- glm(count ~ year + date + ampm, family = poisson (link = "log"), data = Owl)
+```
+
+---
+
+#Check assumptions of the model
+
+1. Distribution of the residuals
+
+```{r}
+par(mfrow = c(2,2))
+plot(OwlModel)
+```
+
+
+---
+
+2. Overdispersion
+
+In a poisson distribution, mean = variance
+
+Overdispersion parameter $\theta$ = $\frac{ \text{residual deviance}}{\text{residual degrees of freedom}}$
+
+```{r}
+OwlModel$deviance / OwlModel$df.residual
+```
+
+---
+
+#pseudo $R^2$ explained deviance
+
+Pseudo $R^2$ = $\frac{\text{null deviance} - \text{residual deviance}}{\text{null deviance}}$
+
+```{r}
+(OwlModel$null.deviance - OwlModel$deviance) / OwlModel$null.deviance
+```
+
+---
+
+#Model Summary
+
+```{r}
+
+summary(OwlModel)
+
+```
+
+---
+
+#Challenge 
+
+Using the Boar csv, run the appropriate GLM.
+
+Make sure you check the model assumptions and all appropriate link functions
+
+---
+
+# Learning Objectives
+
+By the end of this lesson the students will:
+
+- Differentiate and categorize GLMs vs ANOVAS and regressions
+- Identify the different components of GLMs
+- Select the most appropriate GLM
+- Carry out a GLM
+
+---
+
+#Summary 
+
+---
+
+#Challenge 2 Solution
+
+---

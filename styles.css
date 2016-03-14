@@ -11,3 +11,11 @@
     width: 60%;
     padding: 10px;
 }
+table, th, td {
+    width: 60px;
+    padding: 15px;
+    text-align: left;
+}
+.smaller{
+  font-size:small;
+}
