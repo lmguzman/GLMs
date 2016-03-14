@@ -11,6 +11,10 @@ Etherpad:
 
 https://public.etherpad-mozilla.org/p/404GLMs
 
+Link to all material:
+
+https://github.com/lmguzman/GLMs
+
 ---
 
 ## What is a frequency distribution? {#freq .center}
