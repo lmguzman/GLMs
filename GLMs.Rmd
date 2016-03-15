@@ -1,7 +1,7 @@
 ---
 title: "Generalized Linear Models"
 author: "Melissa Guzman"
-date: "March 13, 2016"
+date: "March 16, 2016"
 output:
   slidy_presentation:
     css: styles.css
@@ -205,8 +205,8 @@ LO: Select the most appropriate GLM {.smaller}
 Let's look at some data first. 
 
 ```{r}
-Owl <- read.csv('lizards.txt', sep = "\t")
-head(Owl)
+Lizards <- read.csv('lizards.txt', sep = "\t")
+head(Lizards)
 ```
 
 LO: Carry out a GLM {.smaller}
@@ -214,15 +214,15 @@ LO: Carry out a GLM {.smaller}
 
 ---
 ```{r}
-hist(Owl$n)
+hist(Lizards$n)
 ```
 
 ---
 
 ```{r}
-OwlModelLM <- lm(n ~ sun + height + species, data = Owl)
+LizardsModelLM <- lm(n ~ sun + height + species, data = Lizards)
 
-OwlModel <- glm(n ~ sun + height + species, family = poisson (link = log), data = Owl)
+LizardsModel <- glm(n ~ sun + height + species, family = poisson (link = log), data = Lizards)
 ```
 
 ---
@@ -233,7 +233,7 @@ OwlModel <- glm(n ~ sun + height + species, family = poisson (link = log), data 
 
 ```{r}
 par(mfrow = c(2,2))
-plot(OwlModelLM)
+plot(LizardsModelLM)
 ```
 
 ---
@@ -242,7 +242,7 @@ plot(OwlModelLM)
 
 ```{r}
 par(mfrow = c(2,2))
-plot(OwlModel)
+plot(LizardsModel)
 ```
 
 
@@ -255,8 +255,10 @@ In a poisson distribution, mean = variance
 Overdispersion parameter $\theta$ = $\frac{ \text{residual deviance}}{\text{residual degrees of freedom}}$
 
 ```{r}
-OwlModel$deviance / OwlModel$df.residual
+LizardsModel$deviance / LizardsModel$df.residual
 ```
+
+If your model is overdispersed use the *quasi* family. In this case, quasipoisson
 
 ---
 
@@ -265,7 +267,7 @@ OwlModel$deviance / OwlModel$df.residual
 Pseudo $R^2$ = $\frac{\text{null deviance} - \text{residual deviance}}{\text{null deviance}}$
 
 ```{r}
-(OwlModel$null.deviance - OwlModel$deviance) / OwlModel$null.deviance
+(LizardsModel$null.deviance - LizardsModel$deviance) / LizardsModel$null.deviance
 ```
 
 ---
@@ -274,7 +276,7 @@ Pseudo $R^2$ = $\frac{\text{null deviance} - \text{residual deviance}}{\text{nul
 
 ```{r}
 
-summary(OwlModel)
+summary(LizardsModel)
 
 ```
 
@@ -301,6 +303,8 @@ By the end of this lesson the students will:
 
 #Summary 
 
+<img src="flowchart.png" width="800">
+
 ---
 
 #Challenge 2 Solution
@@ -320,7 +324,23 @@ Tb is the response variable. Sex, age and length are explanatory variables.
 summary(Boar)
 ```
 
-Looking at the summary, Tb is a categorical variables with two categories. Therefore we need to use the binomial distribution. 
+Let's check the distribion to see how it looks like.
+
+```{r}
+hist(Boar$Tb)
+```
+
+Looking at the summary and histogram, Tb is a categorical variables with two categories. Therefore we need to use the binomial distribution. 
+
+We can start with a linear model
+
+```{r}
+LinearBoarModel <- lm(Tb ~ sex * age * length, data = Boar)
+par(mfrow = c(2,2))
+plot(LinearBoarModel)
+```
+
+The residuals don't look very normally distributed. Let's use a binomial family. 
 
 The default link functions for the binomial distribution are: logit, probit, cauchit, log, cloglog
 Let's start with the logit function
@@ -344,7 +364,7 @@ par(mfrow = c(2,2))
 plot(LogitBoarModel)
 ```
 
-Look at all the other link functions and choose the one with the lowest AIC
+Look at all the other link functions and choose the one with the lowest AIC and better distribution of the residuals. 
 
 ```{r}
 probitBoarModel <- glm(Tb ~ sex * age * length, family = binomial (link = probit), data = Boar)
@@ -359,6 +379,23 @@ AIC(LogitBoarModel, probitBoarModel, cauchitBoarModel, logBoarModel, cloglogBoar
 ```
 
 Logit has the lowest AIC, so let's keep working with that
+
+Let's check the distribution of the residuals.
+
+```{r}
+par(mfrow = c(2,2))
+plot(LogitBoarModel)
+```
+
+We also need to check for overdispersion
+
+```{r}
+LogitBoarModel$deviance / LogitBoarModel$df.residual
+```
+
+$\theta$ is close to 1, so we can keep the binomial family. 
+
+We can keep refining the model using model simplification to choose a model we are happy with. 
 
 
 ---
