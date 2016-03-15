@@ -71,7 +71,7 @@ LO: Differentiate and categorize GLMs vs ANOVAS and regressions {.smaller}
 
 # When do we use them?
 
-Used when the residuals from a General Linear Model are not-normal and/or there are non-linear relationships between dependent & independent variables
+Used when the *residuals* from a linear model are not-normal 
 
 Whilst it is the error distribution (the residuals) that is important, the distribution of the dependent variable has a strong influence on this.
 
@@ -81,11 +81,11 @@ Whilst it is the error distribution (the residuals) that is important, the distr
 
 $y = g(\beta_{0} + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{i}X_{i}) + \varepsilon$
 
-$X$ is your explanatory variable 
+$X$ are your explanatory variables 
 
 $y$ your response variable 
 
-$\beta$ is the coefficient
+$\beta$ are the coefficients
 
 $\varepsilon$ is the error term
 
@@ -99,7 +99,6 @@ LO: Identify the different components of GLMs {.smaller}
 # What is the link function?
 
 Link Functions: defining the shape of the relationship between the dependent & independent variables.
-
 ```{r, echo = FALSE}
 par(mfrow = c(1,1))
 x <- 1:100
@@ -123,6 +122,38 @@ legend(x = 'topright', inset=c(-0.53,0), legend = c('Identity', 'Negative Binomi
 
 ```
 
+---
+
+#Why use a link function instead of transforming the data?
+```{r, echo = FALSE, warning = FALSE}
+x <- runif(100, 0, 10)
+y <- exp(x) + rnorm(length(x), mean = 0, sd = 100)
+par(mfrow = c(1,2))
+plot(x, y, pch = 16, main = 'Original data')
+plot(x, log(y), main = 'Log transformed')
+```
+
+---
+
+#Let's fit some models to that data
+
+```{r, warning = FALSE}
+model1 <- lm(log(y)~x)
+model2 <- glm(y~x, family = gaussian (link = "log"), start=c(1, 1))
+```
+
+```{r, echo = FALSE, warning = FALSE}
+par(mfrow = c(1,2))
+
+plot(x, log(y), main = 'LM')
+fitedx <- x[as.numeric(names(model1$fitted.values))]
+points(fitedx, model1$fitted.values, col = 'red')
+legend(x = 'topleft', legend = c('Original values','Fitted values'), pch = c(16, 1), col = c('black','red'))
+
+plot(x, y, pch = 16, main = 'GLM')
+points(x, model2$fitted.values, col = 'red')
+legend(x = 'topleft', legend = c('Original values','Fitted values'), pch = c(16, 1), col = c('black','red'))
+```
 
 Using a link function is often better than simply transforming the dependent variable, because it doesn’t simply attempt to make the variance constant. Instead, it fits a function that “adjusts” the variance as the data is being fitted.
 
@@ -143,6 +174,8 @@ binomial (d)         |logit, probit, cauchit, log, cloglog
 quasibinomial (d)    |identity, logit, probit, cloglog                                   
 
  d = discrete, c = continous
+ 
+ First link is the default
  
 ---
 
@@ -172,7 +205,7 @@ LO: Select the most appropriate GLM {.smaller}
 Let's look at some data first. 
 
 ```{r}
-Owl <- read.csv('Owl.csv')
+Owl <- read.csv('lizards.txt', sep = "\t")
 head(Owl)
 ```
 
@@ -181,13 +214,15 @@ LO: Carry out a GLM {.smaller}
 
 ---
 ```{r}
-hist(Owl$count)
+hist(Owl$n)
 ```
 
 ---
 
 ```{r}
-OwlModel <- glm(count ~ year + date + ampm, family = poisson (link = "log"), data = Owl)
+OwlModelLM <- lm(n ~ sun + height + species, data = Owl)
+
+OwlModel <- glm(n ~ sun + height + species, family = poisson (link = log), data = Owl)
 ```
 
 ---
@@ -195,6 +230,15 @@ OwlModel <- glm(count ~ year + date + ampm, family = poisson (link = "log"), dat
 #Check assumptions of the model
 
 1. Distribution of the residuals
+
+```{r}
+par(mfrow = c(2,2))
+plot(OwlModelLM)
+```
+
+---
+
+#Let's see the GLM
 
 ```{r}
 par(mfrow = c(2,2))
