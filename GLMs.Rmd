@@ -197,6 +197,27 @@ LO: Select the most appropriate GLM {.smaller}
 
 # Challenge 
 
+```{r, echo = FALSE, warning = FALSE}
+
+ClassData <- read.csv('ClassData.csv')
+
+library(dplyr)
+ClassData <- ClassData %>% 
+  mutate(Sex = ifelse(What.is.your.sex. == 'Female', 1, 0)) %>%
+  mutate(Sex = as.numeric(Sex))
+
+str(ClassData)
+par(mfrow = c(3, 2))
+hist(ClassData$How.old.are.you., xlab = '', main = 'How old are you?')
+hist(ClassData$How.many.siblings.do.you.have., xlab = '', main = 'How many siblings do you have?')
+hist(ClassData$How.tall.are.you..in.cm , xlab = '', main = 'How tall are you?')
+hist(ClassData$Sex, xlab = '', main = 'What is your sex?')
+hist(ClassData$Out.of.the.7.nights.of.the.week..how.many.do.you.sleep.at.least.6.hours./7, xlab = '', main = 'How many nights a week do you sleep at least 6 hours')
+
+```
+
+
+
 
 ---
 
