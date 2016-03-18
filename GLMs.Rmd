@@ -47,7 +47,7 @@ hist(negbim, breaks = 20, main = 'Negative Binomial', xlab = NULL)
 
 # Why do we care? {#care .center}
 
-<img src="Hollow_curve_beetles.png" width="500">
+<img src="Figures/Hollow_curve_beetles.png" width="500">
 
 Relative species abundance of beetles sampled from the river Thames collected by C.B. Williams (1964). (Magurran 2004)
 
@@ -64,7 +64,7 @@ By the end of this lesson the students will:
 
 ---
 
-<img src="frameework.png" width="800">
+<img src="Figures/frameework.png" width="800">
 
 LO: Differentiate and categorize GLMs vs ANOVAS and regressions {.smaller}
 ---
@@ -199,7 +199,7 @@ LO: Select the most appropriate GLM {.smaller}
 
 ```{r, echo = FALSE, message = FALSE}
 
-ClassData <- read.csv('ClassData.csv')
+ClassData <- read.csv('Data/ClassData.csv')
 
 library(dplyr)
 ClassData <- ClassData %>% 
@@ -222,6 +222,8 @@ What type of distribution are these?
 
 Can you think of other types of data with the same distribution?
 
+What family and link functions would you use?
+
 
 ---
 
@@ -230,7 +232,7 @@ Can you think of other types of data with the same distribution?
 Let's look at some data first. 
 
 ```{r}
-Lizards <- read.csv('lizards.txt', sep = "\t")
+Lizards <- read.csv('Data/lizards.txt', sep = "\t")
 head(Lizards)
 ```
 
@@ -328,7 +330,7 @@ By the end of this lesson the students will:
 
 #Summary 
 
-<img src="flowchart.png" width="800">
+<img src="Figures/flowchart.png" width="800">
 
 ---
 
@@ -338,7 +340,7 @@ Look at the data first
 
 ```{r}
 
-Boar <- read.csv('Boar.csv')
+Boar <- read.csv('Data/Boar.csv')
 
 head(Boar)
 ```
