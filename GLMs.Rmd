@@ -197,7 +197,7 @@ LO: Select the most appropriate GLM {.smaller}
 
 # Challenge 
 
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE}
 
 ClassData <- read.csv('ClassData.csv')
 
@@ -205,8 +205,10 @@ library(dplyr)
 ClassData <- ClassData %>% 
   mutate(Sex = ifelse(What.is.your.sex. == 'Female', 1, 0)) %>%
   mutate(Sex = as.numeric(Sex))
+```
 
-str(ClassData)
+
+```{r, echo = FALSE}
 par(mfrow = c(3, 2))
 hist(ClassData$How.old.are.you., xlab = '', main = 'How old are you?')
 hist(ClassData$How.many.siblings.do.you.have., xlab = '', main = 'How many siblings do you have?')
@@ -216,7 +218,9 @@ hist(ClassData$Out.of.the.7.nights.of.the.week..how.many.do.you.sleep.at.least.6
 
 ```
 
+What type of distribution are these?
 
+Can you think of other types of data with the same distribution?
 
 
 ---
